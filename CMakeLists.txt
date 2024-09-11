@@ -8,7 +8,7 @@ include_directories("lib/imgui")
 include_directories("lib/imgui/backends")
 include_directories("include")
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 file (GLOB PLATFORM_SRC
