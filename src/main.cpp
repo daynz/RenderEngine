@@ -1,4 +1,4 @@
-#include "Engine.hpp"
+﻿#include "Engine.hpp"
 
 // Main code
 int main(int, char**)
@@ -7,6 +7,8 @@ int main(int, char**)
 
     // Main loop
     engine->renderLoop();
+    engine->setModel();
+    engine->setOpenGL();
 
     // Cleanup
     Engine::clearup();

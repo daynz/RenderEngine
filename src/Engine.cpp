@@ -1,4 +1,4 @@
-#include "Engine.hpp"
+﻿#include "Engine.hpp"
 
 Engine* Engine::instance()
 {
@@ -30,7 +30,7 @@ GLFWwindow* Engine::window() const
 }
 
 Engine::Engine(unsigned int scrW, unsigned int scrH)
-	:m_ScrWidth(scrW), m_ScrHeight(scrH)
+	:m_ScrWidth(scrW), m_ScrHeight(scrH), deltaTime(0.0f)
 {
 	init();
 }
@@ -67,6 +67,8 @@ void Engine::init()
 {
 	initOpenGL();
 	initImgui();
+
+	op = Operation::instance(this->m_ScrWidth, this->m_ScrHeight, camera);
 }
 
 void Engine::clearup()
@@ -86,6 +88,8 @@ void Engine::renderLoop()
 	while (!glfwWindowShouldClose(this->m_Window))
 	{
 		glfwPollEvents();
+
+		op->processInput(m_Window, deltaTime);
 
 		// Start the Dear ImGui frame
 		ImGui_ImplOpenGL3_NewFrame();
@@ -110,4 +114,14 @@ void Engine::renderLoop()
 	}
 }
 
-Engine* Engine::m_Instance;
+void Engine::setOpenGL()
+{
+
+}
+
+void Engine::setModel()
+{
+
+}
+
+Engine* Engine::m_Instance = nullptr;
