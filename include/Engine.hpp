@@ -49,4 +49,8 @@ private:
 	Camera camera;
 	float lastX;
 	float lastY;
+
+	unsigned int VAO;
 };
+
+void testModel(unsigned int VAO);
