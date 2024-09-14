@@ -8,6 +8,7 @@
 #include "imgui_impl_opengl3.h"
 
 #include "Camera.hpp"
+#include "Shader.hpp"
 
 class Engine
 {
@@ -29,6 +30,7 @@ public:
 	void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
 	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
+	Shader* shader;
 protected:
 
 private:
@@ -45,12 +47,14 @@ private:
 
 	unsigned int m_ScrWidth, m_ScrHeight;
 	float deltaTime;
+	float lastFrame;
+
 	GLFWwindow* m_Window;
-	Camera camera;
+	Camera* camera;
 	float lastX;
 	float lastY;
 
 	unsigned int VAO;
 };
 
-void testModel(unsigned int VAO);
+void testModel(unsigned int& VAO);

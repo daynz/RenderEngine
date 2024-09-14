@@ -16,7 +16,7 @@ enum Camera_Movement
 	SPEEDDOWN
 };
 
-const float YAW = 0.0f;
+const float YAW = -90.0f;
 const float PITCH = 0.0f;
 const float ROLL = 0.0f;
 const float SPEED = 2.0f;
@@ -27,7 +27,7 @@ class Camera
 {
 public:
 	Camera(
-		glm::vec3 m_Position = glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3 m_Position = glm::vec3(0.0f, 0.0f, 3.0f),
 		glm::vec3 m_Front = glm::vec3(0.0f, 0.0f, -1.0f),
 		glm::vec3 m_Up = glm::vec3(0.0f, 1.0f, 0.0f),
 		float m_Fov_Y = 45.0f,
@@ -42,6 +42,7 @@ public:
 		int scrWidth = 800,
 		int scrHeight = 600
 	);
+	Camera(int scrw, int scrh);
 
 	//获取观察矩阵
 	glm::mat4 getViewMatrix();
@@ -77,6 +78,8 @@ public:
 	float speed() const;
 	float sensitivity() const;
 	float zoom() const;
+
+	void show()const;
 
 private:
 	glm::vec3 m_Position;

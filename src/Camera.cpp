@@ -1,8 +1,18 @@
 ﻿#include "Camera.hpp"
-
+#include <iostream>
 Camera::Camera(glm::vec3 m_Position, glm::vec3 m_Front, glm::vec3 m_Up, float m_Fov_Y, float m_Near, float m_Far, float m_Yaw, float m_Pitch, float m_Roll, float m_Speed, float m_Sensitivity, float m_Zoom, int scrWidth, int scrHeight)
 	:m_Position(m_Position), m_Front(m_Front), m_Up(m_Up), m_Fov_Y(m_Fov_Y), m_Near(m_Near), m_Far(m_Far), m_Yaw(m_Yaw), m_Pitch(m_Pitch), m_Roll(m_Roll), m_Speed(m_Speed), m_Sensitivity(m_Sensitivity), m_Zoom(m_Zoom), scrWidth(scrWidth), scrHeight(scrHeight)
 {
+	m_Aspect = (float)scrWidth / (float)scrHeight;
+	m_WorldUp = m_Up;
+	updateCameraVectors();
+}
+
+Camera::Camera(int scrw, int scrh)
+	:Camera()
+{
+	this->scrWidth = scrw;
+	this->scrHeight = scrh;
 	m_Aspect = (float)scrWidth / (float)scrHeight;
 	m_WorldUp = m_Up;
 	updateCameraVectors();
@@ -46,6 +56,14 @@ void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPi
 	m_Yaw += xoffset;
 	m_Pitch += yoffset;
 
+	if (constrainPitch)
+	{
+		if (m_Pitch > 89.0f)
+			m_Pitch = 89.0f;
+		if (m_Pitch < -89.0f)
+			m_Pitch = -89.0f;
+	}
+
 	updateCameraVectors();
 }
 
@@ -57,12 +75,13 @@ void Camera::processMouseSroll(float yoffset)
 void Camera::updateCameraVectors()
 {
 	glm::vec3 front;
-	front.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Roll));
-	front.y = sin(glm::radians(m_Pitch)) * sin(glm::radians(m_Roll));
+	front.x = cos(glm::radians(m_Yaw))/* * cos(glm::radians(m_Roll))*/;
+	front.y = sin(glm::radians(m_Pitch))/* * sin(glm::radians(m_Roll))*/; 
 	front.z = sin(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
 	m_Front = glm::normalize(front);
 	m_Right = glm::normalize(glm::cross(m_Front, m_WorldUp));
 	m_Up = glm::normalize(glm::cross(m_Right, m_Front));
+	//show();
 }
 
 void Camera::position(const glm::vec3& p)
@@ -193,4 +212,9 @@ void Camera::zoom(float z)
 float Camera::zoom() const
 {
 	return m_Zoom;
+}
+
+void Camera::show() const
+{
+	std::cout << m_Position.x << "," << m_Position.y << "," << m_Position.z << std::endl;
 }
