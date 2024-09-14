@@ -33,6 +33,8 @@ Engine::Engine(unsigned int scrW, unsigned int scrH)
 	:m_ScrWidth(scrW), m_ScrHeight(scrH), deltaTime(0.0f)
 {
 	init();
+	this->lastX = (float)m_ScrWidth / 2.0f;
+	this->lastY = (float)m_ScrHeight / 2.0f;
 }
 
 Engine::~Engine()
@@ -67,8 +69,6 @@ void Engine::init()
 {
 	initOpenGL();
 	initImgui();
-
-	op = Operation::instance(this->m_ScrWidth, this->m_ScrHeight, camera);
 }
 
 void Engine::clearup()
@@ -89,7 +89,7 @@ void Engine::renderLoop()
 	{
 		glfwPollEvents();
 
-		op->processInput(m_Window, deltaTime);
+		processInput(m_Window, deltaTime);
 
 		// Start the Dear ImGui frame
 		ImGui_ImplOpenGL3_NewFrame();
@@ -116,7 +116,9 @@ void Engine::renderLoop()
 
 void Engine::setOpenGL()
 {
-
+	glfwSetCursorPosCallback(m_Window, [](GLFWwindow* win, double xpos, double ypos) {
+		instance()->mouse_callback(win, xpos, ypos);
+	});
 }
 
 void Engine::setModel()
@@ -125,3 +127,45 @@ void Engine::setModel()
 }
 
 Engine* Engine::m_Instance = nullptr;
+
+void Engine::processInput(GLFWwindow* window, float deltaTime)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+
+	float cameraSpeed = 2.5f * deltaTime;
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		camera.processKeyboard(FORWARD, deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		camera.processKeyboard(BACKWARD, deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		camera.processKeyboard(LEFT, deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		camera.processKeyboard(RIGHT, deltaTime);
+	}
+}
+
+void Engine::mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+{
+	float xpos = (float)xposIn;
+	float ypos = (float)yposIn;
+
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos;
+	lastX = xpos;
+	lastY = ypos;
+
+	camera.processMouseMovement(xoffset, yoffset);
+}
+
+void Engine::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	camera.processMouseSroll((float)yoffset);
+}

@@ -7,7 +7,6 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-#include "Operation.hpp"
 #include "Camera.hpp"
 
 class Engine
@@ -26,6 +25,10 @@ public:
 	void setOpenGL();
 	void setModel();
 
+	void processInput(GLFWwindow* window, float deltaTime);
+	void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
+	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+
 protected:
 
 private:
@@ -43,6 +46,7 @@ private:
 	unsigned int m_ScrWidth, m_ScrHeight;
 	float deltaTime;
 	GLFWwindow* m_Window;
-	Operation* op;
 	Camera camera;
+	float lastX;
+	float lastY;
 };
