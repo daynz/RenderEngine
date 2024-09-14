@@ -30,7 +30,7 @@ GLFWwindow* Engine::window() const
 }
 
 Engine::Engine(unsigned int scrW, unsigned int scrH)
-	:m_ScrWidth(scrW), m_ScrHeight(scrH), deltaTime(0.0f), lastFrame(0.0f)
+	:m_ScrWidth(scrW), m_ScrHeight(scrH), deltaTime(0.0f), lastFrame(0.0f), firstMouse(true)
 {
 	init();
 	this->lastX = (float)m_ScrWidth / 2.0f;
@@ -174,12 +174,35 @@ void Engine::processInput(GLFWwindow* window, float deltaTime)
 	{
 		camera->processKeyboard(RIGHT, deltaTime);
 	}
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	{
+		camera->processKeyboard(UP, deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+	{
+		camera->processKeyboard(DOWN, deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+	{
+		camera->processKeyboard(SPEEDUP, deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
+	{
+		camera->processKeyboard(SPEEDDOWN, deltaTime);
+	}
 }
 
 void Engine::mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
 	float xpos = (float)xposIn;
 	float ypos = (float)yposIn;
+
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
 
 	float xoffset = xpos - lastX;
 	float yoffset = lastY - ypos;
@@ -191,7 +214,7 @@ void Engine::mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 
 void Engine::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	camera->processMouseSroll((float)yoffset);
+	camera->processMouseScroll((float)yoffset);
 }
 
 void testModel(unsigned int& VAO)

@@ -53,6 +53,7 @@ private:
 	Camera* camera;
 	float lastX;
 	float lastY;
+	bool firstMouse;
 
 	unsigned int VAO;
 };

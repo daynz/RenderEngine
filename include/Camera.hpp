@@ -49,7 +49,7 @@ public:
 
 	void processKeyboard(Camera_Movement direction, float deltaTime);
 	void processMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
-	void processMouseSroll(float yoffset);
+	void processMouseScroll(float yoffset);
 
 	void position(const glm::vec3& p);
 	void front(const glm::vec3& f);
