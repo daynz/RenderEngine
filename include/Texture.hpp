@@ -3,10 +3,12 @@
 class Texture
 {
 public:
+	Texture();
 	Texture(std::string texturePath);
 
+	unsigned int texture()const;
 private:
-	unsigned int texture;
+	unsigned int m_Texture;
 
 protected:
 

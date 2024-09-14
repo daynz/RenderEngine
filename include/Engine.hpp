@@ -9,6 +9,7 @@
 
 #include "Camera.hpp"
 #include "Shader.hpp"
+#include "Texture.hpp"
 
 class Engine
 {
@@ -56,6 +57,5 @@ private:
 	bool firstMouse;
 
 	unsigned int VAO;
+	Texture* tex;
 };
-
-void testModel(unsigned int& VAO);
