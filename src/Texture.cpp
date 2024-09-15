@@ -43,3 +43,8 @@ unsigned int Texture::texture() const
 	return this->m_Texture;
 }
 
+std::string Texture::type() const
+{
+	return m_type;
+}
+
