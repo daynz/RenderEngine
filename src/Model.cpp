@@ -116,11 +116,22 @@ std::vector<Texture> Model::loadMaterialTexture(aiMaterial* mat, aiTextureType t
 		bool skip = false;
 		for (int j = 0; j < m_Textures_Loaded.size(); j++)
 		{
-			if (std::strcmp(m_Textures_Loaded[j].path.data, str.C_Str()) == 0)
+			if (std::strcmp(m_Textures_Loaded[j].path().c_str(), str.C_Str()) == 0)
 			{
-
+				textures.push_back(m_Textures_Loaded[j]);
+				skip = true;
+				break;
 			}
 		}
+		if (!skip)
+		{
+			Texture tex(str.C_Str());
+			tex.type(typeName);
+			tex.path(str);
+			textures.push_back(tex);
+			m_Textures_Loaded.push_back(tex);
+		}
 	}
+	return textures;
 }
 
