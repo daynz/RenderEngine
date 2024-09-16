@@ -1,14 +1,18 @@
 #include "Model.hpp"
 #include <iostream>
 
-Model::Model(const char* path, bool gamma)
+Model::Model(std::string path, bool gamma)
+	:m_GammaCorrection(gamma)
 {
 	loadModel(path);
 }
 
 void Model::Draw(Shader& shader)
 {
-
+	for (int i = 0; i < m_Meshes.size(); i++)
+	{
+		m_Meshes[i].Draw(shader);
+	}
 }
 
 void Model::loadModel(std::string path)
