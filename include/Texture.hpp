@@ -1,21 +1,28 @@
 #include <string>
 
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+
 class Texture
 {
 public:
 	Texture();
 	Texture(std::string texturePath);
+	Texture(std::string path, const std::string& directory, bool gamma);
 
 	unsigned int texture()const;
 
 	std::string type()const;
 	void type(std::string t);
-	std::string path()const;
-	void path(std::string p);
+
+	aiString path()const;
+	void path(aiString p);
+
 private:
-	std::string m_Path;
 	unsigned int m_Texture;
 	std::string m_type;
+	aiString m_Path;
 protected:
 
 };
