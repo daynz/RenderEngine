@@ -48,3 +48,18 @@ std::string Texture::type() const
 	return m_type;
 }
 
+void Texture::type(std::string t)
+{
+	this->m_type = t;
+}
+
+std::string Texture::path() const
+{
+	return this->m_Path;
+}
+
+void Texture::path(std::string p)
+{
+	this->m_Path = p;
+}
+
