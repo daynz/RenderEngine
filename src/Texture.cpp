@@ -42,14 +42,13 @@ Texture::Texture(std::string path, const std::string& directory, bool gamma)
 {
 	path = directory + '/' + path;
 
-	unsigned int textureID;
-	glGenTextures(1, &textureID);
-
+	glGenTextures(1, &m_Texture);
+	
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
 	if (data)
 	{
-		GLenum format;
+		GLenum format = 1;
 		if (nrChannels == 1)
 		{
 			format = GL_RED;
@@ -62,8 +61,8 @@ Texture::Texture(std::string path, const std::string& directory, bool gamma)
 		{
 			format = GL_RGBA;
 		}
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glBindTexture(GL_TEXTURE_2D, m_Texture);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -76,7 +75,6 @@ Texture::Texture(std::string path, const std::string& directory, bool gamma)
 		std::cout << "Error::Texture::Failed_to_Load_Texture" << std::endl;
 	}
 	stbi_image_free(data);
-
 }
 
 unsigned int Texture::texture() const

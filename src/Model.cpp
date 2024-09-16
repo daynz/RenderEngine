@@ -1,10 +1,11 @@
 #include "Model.hpp"
 #include <iostream>
 
-Model::Model(std::string path, bool gamma)
+Model::Model(char* path, bool gamma)
 	:m_GammaCorrection(gamma)
 {
-	loadModel(path);
+	std::string p = std::string(path);
+	loadModel(p);
 }
 
 void Model::Draw(Shader& shader)
@@ -36,7 +37,7 @@ void Model::processNode(aiNode* node, const aiScene* scene)
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		this->m_Meshes.push_back(processMesh(mesh, scene));
 	}
-	for (int i = 0; i < node->mNumMeshes; i++)
+	for (int i = 0; i < node->mNumChildren; i++)
 	{
 		processNode(node->mChildren[i], scene);
 	}
@@ -129,7 +130,7 @@ std::vector<Texture> Model::loadMaterialTexture(aiMaterial* mat, aiTextureType t
 		}
 		if (!skip)
 		{
-			Texture tex(str.C_Str(),m_Directory);
+			Texture tex = Texture(str.C_Str(),m_Directory);
 			tex.type(typeName);
 			tex.path(str);
 			textures.push_back(tex);

@@ -3,7 +3,7 @@
 Mesh::Mesh(std::vector<Vertex>vertices, std::vector<unsigned int>indices, std::vector<Texture>textures)
 	:m_Vertices(vertices), m_Indices(indices), m_Textures(textures)
 {
-	
+	setupMesh();
 }
 
 void Mesh::Draw(Shader& shader)
@@ -35,19 +35,14 @@ void Mesh::Draw(Shader& shader)
 			number = std::to_string(heightNr++);
 		}
 
-		shader.setInt((name + number).c_str(), i);
+		shader.setInt((name + number), i);
 		glBindTexture(GL_TEXTURE_2D, m_Textures[i].texture());
 	}
 
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, (int)m_Indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 	glActiveTexture(GL_TEXTURE0);
-}
-
-unsigned int Mesh::VAO() const
-{
-	return m_VAO;
 }
 
 std::vector<Vertex> Mesh::vertices() const
@@ -68,18 +63,16 @@ std::vector<Texture> Mesh::textures() const
 void Mesh::setupMesh()
 {
 	glGenBuffers(1, &VBO);
-	glGenVertexArrays(1, &m_VAO);
+	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &EBO);
 
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	glBufferData(GL_ARRAY_BUFFER, m_Vertices.size() * sizeof(Vertex), &m_Vertices[0], GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Indices.size() * sizeof(unsigned int), &m_Indices[0], GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);

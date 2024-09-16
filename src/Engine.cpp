@@ -37,8 +37,7 @@ Engine::Engine(unsigned int scrW, unsigned int scrH)
 	this->lastY = (float)m_ScrHeight / 2.0f;
 	shader = new Shader("../shader/testModelv.glsl", "../shader/testModelf.glsl");
 	camera = new Camera(this->m_ScrWidth, this->m_ScrHeight);
-	std::string modelpath = "../assets/model/nanosuit/nanosuit.obj";
-	m_Model = new Model("../assets/model/nanosuit/nanosuit.obj");
+	
 }
 
 Engine::~Engine()
@@ -117,22 +116,16 @@ void Engine::renderLoop()
 		glClearColor(0.98f, 0.76f, 0.98f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		/*glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, tex->texture());*/
-
 		glm::mat4 projection = glm::perspective(glm::radians(camera->zoom()), (float)scrWidth() / (float)scrHeight(), camera->near(), camera->far());
 		glm::mat4 view = camera->getViewMatrix();
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		shader->use();
 		shader->setMat4("projection", projection);
 		shader->setMat4("view", view);
 		shader->setMat4("model", model);
 		m_Model->Draw(*shader);
-
-		//glBindVertexArray(VAO);
-		//glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -151,6 +144,8 @@ void Engine::setOpenGL()
 	glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glEnable(GL_DEPTH_TEST);
+
+	m_Model = new Model("../assets/model/nanosuit/nanosuit.obj");
 }
 
 void Engine::setModel()

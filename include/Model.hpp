@@ -11,7 +11,7 @@
 class Model
 {
 public:
-	Model(std::string path, bool gamma = false);
+	Model(char* path, bool gamma = false);
 	void Draw(Shader& shader);
 
 private:
