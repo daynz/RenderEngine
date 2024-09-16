@@ -125,7 +125,7 @@ std::vector<Texture> Model::loadMaterialTexture(aiMaterial* mat, aiTextureType t
 		}
 		if (!skip)
 		{
-			Texture tex(str.C_Str());
+			Texture tex(str.C_Str(),m_Directory);
 			tex.type(typeName);
 			tex.path(str);
 			textures.push_back(tex);

@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 
 #include "assimp/Importer.hpp"
@@ -9,7 +10,7 @@ class Texture
 public:
 	Texture();
 	Texture(std::string texturePath);
-	Texture(std::string path, const std::string& directory, bool gamma);
+	Texture(std::string path, const std::string& directory, bool gamma = false);
 
 	unsigned int texture()const;
 

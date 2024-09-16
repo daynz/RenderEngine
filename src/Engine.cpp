@@ -37,6 +37,7 @@ Engine::Engine(unsigned int scrW, unsigned int scrH)
 	this->lastY = (float)m_ScrHeight / 2.0f;
 	shader = new Shader("../shader/testModelv.glsl", "../shader/testModelf.glsl");
 	camera = new Camera(this->m_ScrWidth, this->m_ScrHeight);
+	m_Model = new Model("../assets/model/nanosuit/nanosuit.obj");
 }
 
 Engine::~Engine()
@@ -115,8 +116,8 @@ void Engine::renderLoop()
 		glClearColor(0.98f, 0.76f, 0.98f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, tex->texture());
+		/*glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, tex->texture());*/
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera->zoom()), (float)scrWidth() / (float)scrHeight(), camera->near(), camera->far());
 		glm::mat4 view = camera->getViewMatrix();
@@ -125,9 +126,10 @@ void Engine::renderLoop()
 		shader->setMat4("projection", projection);
 		shader->setMat4("view", view);
 		shader->setMat4("model", model);
+		m_Model->Draw(*shader);
 
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//glBindVertexArray(VAO);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -150,109 +152,68 @@ void Engine::setOpenGL()
 
 void Engine::setModel()
 {
-	float vertices1[] = {
-		-0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f,  0.5f, -0.5f,
-		 0.5f,  0.5f, -0.5f,
-		-0.5f,  0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
+	//float vertices1[] = {
+	//	// positions          // texture Coords
+	//	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+	//	0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+	//	0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+	//	0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+	//	-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+	//	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
 
-		-0.5f, -0.5f,  0.5f,
-		 0.5f, -0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		-0.5f, -0.5f,  0.5f,
+	//	-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+	//	0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+	//	0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+	//	0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+	//	-0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
+	//	-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
 
-		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
+	//	-0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+	//	-0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+	//	-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+	//	-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+	//	-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+	//	-0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
 
-		 0.5f,  0.5f,  0.5f,
-		 0.5f,  0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
+	//	0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+	//	0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+	//	0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+	//	0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+	//	0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+	//	0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
 
-		-0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f,  0.5f,
-		 0.5f, -0.5f,  0.5f,
-		-0.5f, -0.5f,  0.5f,
-		-0.5f, -0.5f, -0.5f,
+	//	-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+	//	0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+	//	0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+	//	0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+	//	-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+	//	-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
 
-		-0.5f,  0.5f, -0.5f,
-		 0.5f,  0.5f, -0.5f,
-		 0.5f,  0.5f,  0.5f,
-		 0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f,
-	};
-	float vertices[] = {
-		// positions          // texture Coords
-		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-		0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+	//	-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+	//	0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+	//	0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+	//	0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+	//	-0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+	//	-0.5f, 0.5f, -0.5f, 0.0f, 1.0f
+	//};
 
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-		0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-		-0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+	//unsigned int VBO;
+	//glGenVertexArrays(1, &VAO);
+	//glGenBuffers(1, &VBO);
+	//glBindVertexArray(VAO);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	//glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(1);
+	//glBindBuffer(GL_BUFFER, 0);
+	//glBindVertexArray(0);
 
-		-0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-		-0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-		-0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+	//tex = new Texture("../assets/texture/Elysia.png");
+	//shader->setInt("texture", 0);
 
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
 
-		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
-		0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-		0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-
-		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
-		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f
-	};
-
-	unsigned int VBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_BUFFER, 0);
-	glBindVertexArray(0);
-
-	tex = new Texture("../assets/texture/Elysia.png");
-	shader->setInt("texture", 0);
 }
 
 Engine* Engine::m_Instance = nullptr;

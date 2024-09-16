@@ -8,12 +8,6 @@
 
 #include "Mesh.hpp"
 
-struct sTexture
-{
-	Texture texture;
-	aiString 
-};
-
 class Model
 {
 public:

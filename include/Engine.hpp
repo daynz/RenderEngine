@@ -10,6 +10,7 @@
 #include "Camera.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
+#include "Model.hpp"
 
 class Engine
 {
@@ -52,6 +53,8 @@ private:
 
 	GLFWwindow* m_Window;
 	Camera* camera;
+	Model* m_Model;
+
 	float lastX;
 	float lastY;
 	bool firstMouse;
